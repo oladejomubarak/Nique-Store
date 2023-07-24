@@ -1,8 +1,8 @@
-package com.security.springsecurityproject.controller;
+package oladejo.mubarak.niquestore.controller;
 
 import com.security.springsecurityproject.data.dto.request.LoginRequest;
 import com.security.springsecurityproject.data.dto.request.UserDto;
-import com.security.springsecurityproject.service.UserService;
+import oladejo.mubarak.niquestore.service.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/auth/")
 public class CustomerController {
     @Autowired
-    private UserService userService;
+    private CustomerServiceImpl userService;
 
     @PostMapping("register")
     public ResponseEntity<?> register(@RequestBody UserDto userDto){
