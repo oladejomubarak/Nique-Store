@@ -1,4 +1,4 @@
-package com.security.springsecurityproject.data.dto.request;
+package oladejo.mubarak.niquestore.data.dto.request;
 
 import lombok.Data;
 

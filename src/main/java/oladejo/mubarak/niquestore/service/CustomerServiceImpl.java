@@ -1,12 +1,11 @@
 package oladejo.mubarak.niquestore.service;
-
-import com.security.springsecurityproject.config.JwtService;
-import com.security.springsecurityproject.data.dto.request.LoginRequest;
-import com.security.springsecurityproject.data.dto.request.UserDto;
-import com.security.springsecurityproject.data.repository.UserRepo;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import oladejo.mubarak.niquestore.config.security.JwtService;
+import oladejo.mubarak.niquestore.data.dto.request.LoginRequest;
+import oladejo.mubarak.niquestore.data.dto.request.UserDto;
 import oladejo.mubarak.niquestore.data.model.AppUser;
+import oladejo.mubarak.niquestore.data.model.Role;
+import oladejo.mubarak.niquestore.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,11 +38,10 @@ public class CustomerServiceImpl implements CustomerService {
         if(foundUser){
             throw new IllegalStateException("email taken");
         }
-        User user = new User();
-        Set<com.security.springsecurityproject.data.model.Role> rolesSet = new HashSet<>();
-        rolesSet.add(com.security.springsecurityproject.data.model.Role.USER);
+        AppUser user = new AppUser();
+        Set<Role> rolesSet = new HashSet<>();
+        rolesSet.add(Role.CUSTOMER);
         user.setEmail(userDto.getEmail());
-        user.setUsername(userDto.getUsername());
         user.setRole(rolesSet);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userRepo.save(user);
@@ -61,21 +59,8 @@ public class CustomerServiceImpl implements CustomerService {
         return "Bearer "+ token;
 
     }
-    public List<User> getAllUsers(){
+    public List<AppUser> getAllUsers(){
         return userRepo.findAll();
     }
 
-    @PostConstruct
-    public void saveUser(){
-        if (userRepo.findAll().size() == 0){
-            User user = new User();
-            Set<com.security.springsecurityproject.data.model.Role> rolesSet = new HashSet<>();
-            rolesSet.add(com.security.springsecurityproject.data.model.Role.ADMIN);
-            user.setEmail("admin@gmail.com");
-            user.setRole(rolesSet);
-            user.setPassword(passwordEncoder.encode("1234"));
-
-            userRepo.save(user);
-        }
-    }
 }
