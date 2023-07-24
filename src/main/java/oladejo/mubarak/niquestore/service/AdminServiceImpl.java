@@ -27,7 +27,7 @@ public class AdminServiceImpl implements AdminService{
             rolesSet.add(Role.CUSTOMER);
             user.setEmail("admin@gmail.com");
             user.setRole(rolesSet);
-            user.setPassword(passwordEncoder.encode("1234"));
+            user.setPassword(passwordEncoder.encode("12345"));
             userRepo.save(user);
         }
     }

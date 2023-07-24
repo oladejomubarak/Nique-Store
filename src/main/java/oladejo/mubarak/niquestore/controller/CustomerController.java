@@ -1,7 +1,6 @@
 package oladejo.mubarak.niquestore.controller;
-
-import com.security.springsecurityproject.data.dto.request.LoginRequest;
-import com.security.springsecurityproject.data.dto.request.UserDto;
+import oladejo.mubarak.niquestore.data.dto.request.LoginRequest;
+import oladejo.mubarak.niquestore.data.dto.request.UserDto;
 import oladejo.mubarak.niquestore.service.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

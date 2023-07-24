@@ -2,7 +2,7 @@ package oladejo.mubarak.niquestore.service;
 
 import oladejo.mubarak.niquestore.data.model.SecuredUser;
 import oladejo.mubarak.niquestore.data.model.AppUser;
-import oladejo.mubarak.niquestore.repository;
+import oladejo.mubarak.niquestore.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
