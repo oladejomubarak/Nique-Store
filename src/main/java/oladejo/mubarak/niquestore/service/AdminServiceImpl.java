@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 @Service
 @Slf4j
@@ -37,5 +38,10 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public void registerVendor(String email) {
 
+    }
+
+    @Override
+    public List<AppUser> getAllUsers(){
+        return userRepo.findAll();
     }
 }

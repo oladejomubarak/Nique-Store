@@ -1,5 +1,6 @@
 package oladejo.mubarak.niquestore.controller;
 import lombok.RequiredArgsConstructor;
+import oladejo.mubarak.niquestore.service.AdminServiceImpl;
 import oladejo.mubarak.niquestore.service.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final CustomerServiceImpl userService;
+    private final AdminServiceImpl adminService;
 
     @GetMapping("/all-users")
     public ResponseEntity<?> getAllUsers(){
-        return ResponseEntity.ok(userService.getAllUsers());
+        return ResponseEntity.ok(adminService.getAllUsers());
     }
 }

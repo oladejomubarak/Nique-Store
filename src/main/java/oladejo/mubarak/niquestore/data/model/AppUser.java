@@ -12,5 +12,6 @@ public class AppUser {
     private String lastname;
     private String password;
     private String phoneNumber;
+    private boolean isEnabled = false;
     private Set<Role> role;
 }

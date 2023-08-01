@@ -13,12 +13,5 @@ public class CustomerController {
     @Autowired
     private CustomerServiceImpl userService;
 
-    @PostMapping("register")
-    public ResponseEntity<?> register(@RequestBody UserDto userDto){
-        return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
-    }
-    @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
-        return ResponseEntity.ok(userService.login(loginRequest));
-    }
+
 }
