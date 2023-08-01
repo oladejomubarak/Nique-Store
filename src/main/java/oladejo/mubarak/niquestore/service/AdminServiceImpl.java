@@ -1,6 +1,7 @@
 package oladejo.mubarak.niquestore.service;
 
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import oladejo.mubarak.niquestore.data.model.AppUser;
 import oladejo.mubarak.niquestore.data.model.Role;
@@ -13,11 +14,12 @@ import java.util.HashSet;
 import java.util.Set;
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService{
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepo userRepo;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserRepo userRepo;
     @PostConstruct
     public void saveUser(){
         if (userRepo.findAll().size() == 0){
