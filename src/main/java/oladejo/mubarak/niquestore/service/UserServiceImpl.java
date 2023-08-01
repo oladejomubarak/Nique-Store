@@ -7,6 +7,7 @@ import oladejo.mubarak.niquestore.data.dto.request.LoginRequest;
 import oladejo.mubarak.niquestore.data.dto.request.UserDto;
 import oladejo.mubarak.niquestore.data.model.AppUser;
 import oladejo.mubarak.niquestore.data.model.Role;
+import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 @Service
 @Slf4j
@@ -56,6 +58,8 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public String login(LoginRequest loginRequest){
+        AppUser foundUser = findByEmail(loginRequest.getEmail());
+        if(Objects.equals(foundUser.isEnabled(), false)) throw new NiqueStoreException("You have not been verified");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
