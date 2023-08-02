@@ -10,6 +10,8 @@ public class UserDto {
     @NonNull
     private String password;
     @NonNull
+    private String confirmPassword;
+    @NonNull
     private String firstname;
     @NonNull
     private String lastname;
