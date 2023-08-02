@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import oladejo.mubarak.niquestore.config.email.EmailService;
 import oladejo.mubarak.niquestore.config.security.JwtService;
-import oladejo.mubarak.niquestore.data.dto.request.LoginRequest;
-import oladejo.mubarak.niquestore.data.dto.request.UserDto;
+import oladejo.mubarak.niquestore.data.dto.request.*;
 import oladejo.mubarak.niquestore.data.model.AppUser;
 import oladejo.mubarak.niquestore.data.model.ConfirmationToken;
 import oladejo.mubarak.niquestore.data.model.Role;
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public String register(UserDto userDto) throws MessagingException {
         boolean foundUser= userRepo.existsUserByEmailIgnoreCase(userDto.getEmail());
-        if(foundUser){throw new IllegalStateException("email taken");}
+        if(foundUser){throw new NiqueStoreException("email taken");}
 //        else {
             AppUser user = new AppUser();
             Set<Role> rolesSet = new HashSet<>();
@@ -86,7 +85,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public String login(LoginRequest loginRequest){
         AppUser foundUser = findByEmail(loginRequest.getEmail());
-        if(Objects.equals(foundUser.isEnabled(), false)) throw new NiqueStoreException("You have not been verified");
+        if(Objects.equals(foundUser.isEnabled(), false)) {throw new NiqueStoreException("You have not been verified");}
         if(!BCrypt.checkpw(loginRequest.getPassword(), foundUser.getPassword())){
             throw new IllegalStateException("Incorrect password");
         }
@@ -101,16 +100,6 @@ public class UserServiceImpl implements UserService{
         return "Bearer "+ token;
     }
     @Override
-    public String registerUser(CreateAppUserRequest createAppUserRequest) throws MessagingException {
-        boolean foundUser= userRepo.existsUserByEmailIgnoreCase(userDto.getEmail());
-        if(foundUser){
-            throw new IllegalStateException("email taken");
-        } else {
-
-        }
-    }
-
-    @Override
     public String confirmToken(ConfirmationTokenRequest confirmationTokenRequest) {
         AppUser foundUser = findUserByEmailIgnoreCase(confirmationTokenRequest.getEmail());
         ConfirmationToken foundToken = confirmationTokenService.getConfirmationToken(confirmationTokenRequest.getToken())
@@ -124,7 +113,7 @@ public class UserServiceImpl implements UserService{
         confirmationTokenService.setConfirmedAt(confirmationTokenRequest.getToken());
 
         foundUser.setEnabled(true);
-        appUserRepository.save(foundUser);
+        userRepo.save(foundUser);
         return "you are successfully verified";
     }
 
@@ -165,7 +154,7 @@ public class UserServiceImpl implements UserService{
         if(!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmNewPassword()))
             throw new RuntimeException("Passwords do not match");
         foundUser.setPassword(hashPassword(changePasswordRequest.getNewPassword()));
-        appUserRepository.save(foundUser);
+        userRepo.save(foundUser);
         return "Password changed successfully";
     }
 
@@ -180,7 +169,7 @@ public class UserServiceImpl implements UserService{
                 foundUser
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-        emailService.send(foundUser.getEmailAddress(), buildForgotPasswordEmail(foundUser.getFirstname(), token));
+        emailService.send(foundUser.getEmail(), buildForgotPasswordEmail(foundUser.getFirstname(), token));
         return token;
     }
 
@@ -200,16 +189,9 @@ public class UserServiceImpl implements UserService{
                 new IllegalStateException("passwords do not match");
         }
         foundUser.setPassword(hashPassword(resetPasswordRequest.getNewPassword()));
-        appUserRepository.save(foundUser);
+        userRepo.save(foundUser);
         return "Password reset successfully";
     }
-
-    @Override
-    public AppUser findUserByEmailIgnoreCase(String email) {
-        return appUserRepository.findByEmailAddressIgnoreCase(email).orElseThrow(()-> new IllegalStateException(
-                "No user found with such email"));
-    }
-
     @Override
     public String deleteUserByEmail(String email) {
         AppUser foundUser = findUserByEmailIgnoreCase(email);
