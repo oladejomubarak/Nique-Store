@@ -10,12 +10,9 @@ public interface UserService {
     String login(LoginRequest loginRequest);
     String confirmToken(ConfirmationTokenRequest confirmationTokenRequest);
     String resendToken (ResendTokenRequest resendTokenRequest) throws MessagingException;
-    String deleteAppUser(String email);
-
     String changePassword(ChangePasswordRequest changePasswordRequest);
     String forgotPassword(ForgotPasswordRequest forgotPasswordRequest) throws MessagingException;
     String resetPassword(ResetPasswordRequest resetPasswordRequest);
-    AppUser findUserByEmailIgnoreCase(String email);
     String deleteUserByEmail(String email);
     String deleteAllTokens();
 }

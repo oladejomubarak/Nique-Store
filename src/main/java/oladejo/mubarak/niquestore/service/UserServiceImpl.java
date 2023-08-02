@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public String confirmToken(ConfirmationTokenRequest confirmationTokenRequest) {
-        AppUser foundUser = findUserByEmailIgnoreCase(confirmationTokenRequest.getEmail());
+        AppUser foundUser = findByEmail(confirmationTokenRequest.getEmail());
         ConfirmationToken foundToken = confirmationTokenService.getConfirmationToken(confirmationTokenRequest.getToken())
                 .orElseThrow(()-> new IllegalStateException("such token does not exist"));
         if(foundToken.getExpiredAt().isBefore(LocalDateTime.now())){
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String resendToken (ResendTokenRequest resendTokenRequest) throws MessagingException {
-        AppUser foundUser = findUserByEmailIgnoreCase(resendTokenRequest.getEmail());
+        AppUser foundUser = findByEmail(resendTokenRequest.getEmail());
         if (foundUser.isEnabled()){ throw new IllegalStateException("You are already verified, proceed to login");}
         else {
             String token = generateToken();
@@ -140,15 +140,8 @@ public class UserServiceImpl implements UserService{
         return "token has been resent successfully";
     }
     @Override
-    public String deleteAppUser(String email) {
-        var foundUser = findUserByEmailIgnoreCase(email);
-        appUserRepository.delete(foundUser);
-        return "user deleted successfully";
-    }
-
-    @Override
     public String changePassword(ChangePasswordRequest changePasswordRequest) {
-        AppUser foundUser = findUserByEmailIgnoreCase(changePasswordRequest.getEmail());
+        AppUser foundUser = findByEmail(changePasswordRequest.getEmail());
         if(!BCrypt.checkpw(changePasswordRequest.getOldPassword(), foundUser.getPassword()))
             throw new RuntimeException("wrong old password");
         if(!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmNewPassword()))
@@ -160,7 +153,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String forgotPassword(ForgotPasswordRequest forgotPasswordRequest) throws MessagingException {
-        AppUser foundUser = findUserByEmailIgnoreCase(forgotPasswordRequest.getEmail());
+        AppUser foundUser = findByEmail(forgotPasswordRequest.getEmail());
         String token = generateToken();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
@@ -175,7 +168,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String resetPassword(ResetPasswordRequest resetPasswordRequest) {
-        AppUser foundUser = findUserByEmailIgnoreCase(resetPasswordRequest.getEmail());
+        AppUser foundUser = findByEmail(resetPasswordRequest.getEmail());
         ConfirmationToken foundToken = confirmationTokenService.getConfirmationToken(resetPasswordRequest.getToken())
                 .orElseThrow(()-> new IllegalStateException("such token does not exist"));
         if(foundToken.getExpiredAt().isBefore(LocalDateTime.now())){
@@ -194,8 +187,8 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public String deleteUserByEmail(String email) {
-        AppUser foundUser = findUserByEmailIgnoreCase(email);
-        appUserRepository.delete(foundUser);
+        AppUser foundUser = findByEmail(email);
+        userRepo.delete(foundUser);
         return "user deleted";
     }
 
