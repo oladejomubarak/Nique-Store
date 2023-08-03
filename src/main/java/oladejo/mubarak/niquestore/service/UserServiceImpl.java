@@ -13,7 +13,6 @@ import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.repository.ConfirmationTokenRepository;
 import oladejo.mubarak.niquestore.repository.UserRepo;
 import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +32,6 @@ public class UserServiceImpl implements UserService{
     private final EmailService emailService;
 
     private final ConfirmationTokenService confirmationTokenService;
-
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final UserRepo userRepo;

@@ -1,5 +1,6 @@
 package oladejo.mubarak.niquestore.controller;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import oladejo.mubarak.niquestore.data.dto.request.LoginRequest;
 import oladejo.mubarak.niquestore.data.dto.request.UserDto;
@@ -15,7 +16,7 @@ public class UserController {
     private final UserServiceImpl userService;
 
     @PostMapping("register")
-    public ResponseEntity<?> register(@RequestBody UserDto userDto){
+    public ResponseEntity<?> register(@RequestBody UserDto userDto) throws MessagingException {
         return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
     }
     @GetMapping("login")
