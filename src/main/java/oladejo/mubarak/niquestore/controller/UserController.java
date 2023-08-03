@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import oladejo.mubarak.niquestore.data.dto.request.LoginRequest;
 import oladejo.mubarak.niquestore.data.dto.request.UserDto;
+import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,11 @@ public class UserController {
 
     @PostMapping("register")
     public ResponseEntity<?> register(@RequestBody UserDto userDto) throws MessagingException {
-        return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
+        }catch (NiqueStoreException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     @GetMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){

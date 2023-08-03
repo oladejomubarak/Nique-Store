@@ -15,7 +15,7 @@ public class SecuredUserService implements UserDetailsService {
     private UserRepo userRepo;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser foundUser = userRepo.findUserByEmailIgnoreCase(username).orElse(null);
+        AppUser foundUser = userRepo.findAppUserByEmailIgnoreCase(username).orElse(null);
 
         return new SecuredUser(foundUser);
     }

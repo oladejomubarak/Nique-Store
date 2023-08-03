@@ -6,6 +6,8 @@ import oladejo.mubarak.niquestore.data.model.AppUser;
 
 public interface UserService {
     AppUser findByEmail(String email);
+    AppUser findByPhoneNumber(String phone_number);
+    AppUser findByEmailOrPhoneNumber(String email, String phoneNumber);
     String register(UserDto userDto) throws MessagingException;
     String login(LoginRequest loginRequest);
     String confirmToken(ConfirmationTokenRequest confirmationTokenRequest);

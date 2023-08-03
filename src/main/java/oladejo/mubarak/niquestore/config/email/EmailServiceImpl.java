@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
+
     private final JavaMailSender javaMailSender;
 
     @Override

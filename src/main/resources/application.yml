@@ -1,5 +1,6 @@
 server:
   port: 8081
+spring:
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}

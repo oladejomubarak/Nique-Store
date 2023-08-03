@@ -46,11 +46,22 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public AppUser findByEmail(String email){
-        return userRepo.findUserByEmailIgnoreCase(email).orElseThrow(()-> new NiqueStoreException("user not found"));
+        return userRepo.findAppUserByEmailIgnoreCase(email).orElseThrow(()-> new NiqueStoreException("user not found"));
     }
+
+    @Override
+    public AppUser findByPhoneNumber(String phone_number) {
+        return null;
+    }
+
+    @Override
+    public AppUser findByEmailOrPhoneNumber(String email, String phoneNumber) {
+        return null;
+    }
+
     @Override
     public String register(UserDto userDto) throws MessagingException {
-        boolean foundUser= userRepo.existsUserByEmailIgnoreCase(userDto.getEmail());
+        boolean foundUser= userRepo.existsByEmailIgnoreCaseOrPhoneNumber(userDto.getEmail(), userDto.getPhoneNumber());
         if(foundUser){throw new NiqueStoreException("email taken");}
 //        else {
             AppUser user = new AppUser();
@@ -62,6 +73,7 @@ public class UserServiceImpl implements UserService{
             user.setLastname(userDto.getLastname());
             user.setPhoneNumber(userDto.getPhoneNumber());
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            //user.setPassword(hashPassword(userDto.getPassword()));
             user.setPassword(passwordEncoder.encode(userDto.getConfirmPassword()));
             if (!userDto.getPassword().equals(userDto.getConfirmPassword()))
                 throw new NiqueStoreException("passwords do not match");
@@ -84,8 +96,8 @@ public class UserServiceImpl implements UserService{
     public String login(LoginRequest loginRequest){
         AppUser foundUser = findByEmail(loginRequest.getEmail());
         if(Objects.equals(foundUser.isEnabled(), false)) {throw new NiqueStoreException("You have not been verified");}
-        if(!BCrypt.checkpw(loginRequest.getPassword(), foundUser.getPassword())){
-            throw new IllegalStateException("Incorrect password");
+        if(!passwordEncoder.matches(loginRequest.getPassword(), foundUser.getPassword())){
+            throw new NiqueStoreException("Incorrect password");
         }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -101,12 +113,12 @@ public class UserServiceImpl implements UserService{
     public String confirmToken(ConfirmationTokenRequest confirmationTokenRequest) {
         AppUser foundUser = findByEmail(confirmationTokenRequest.getEmail());
         ConfirmationToken foundToken = confirmationTokenService.getConfirmationToken(confirmationTokenRequest.getToken())
-                .orElseThrow(()-> new IllegalStateException("such token does not exist"));
+                .orElseThrow(()-> new NiqueStoreException("such token does not exist"));
         if(foundToken.getExpiredAt().isBefore(LocalDateTime.now())){
-            throw new IllegalStateException("Token has expired");
+            throw new NiqueStoreException("Token has expired");
         }
         if (foundToken.getConfirmedAt() != null){
-            throw new IllegalStateException("Token has been used");
+            throw new NiqueStoreException("Token has been used");
         }
         confirmationTokenService.setConfirmedAt(confirmationTokenRequest.getToken());
 
@@ -122,7 +134,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public String resendToken (ResendTokenRequest resendTokenRequest) throws MessagingException {
         AppUser foundUser = findByEmail(resendTokenRequest.getEmail());
-        if (foundUser.isEnabled()){ throw new IllegalStateException("You are already verified, proceed to login");}
+        if (foundUser.isEnabled()){ throw new NiqueStoreException("You are already verified, proceed to login");}
         else {
             String token = generateToken();
             emailService.send(resendTokenRequest.getEmail(), buildEmail(foundUser.getFirstname(), token));
@@ -141,10 +153,10 @@ public class UserServiceImpl implements UserService{
     public String changePassword(ChangePasswordRequest changePasswordRequest) {
         AppUser foundUser = findByEmail(changePasswordRequest.getEmail());
         if(!BCrypt.checkpw(changePasswordRequest.getOldPassword(), foundUser.getPassword()))
-            throw new RuntimeException("wrong old password");
+            throw new NiqueStoreException("wrong old password");
         if(!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmNewPassword()))
-            throw new RuntimeException("Passwords do not match");
-        foundUser.setPassword(hashPassword(changePasswordRequest.getNewPassword()));
+            throw new NiqueStoreException("Passwords do not match");
+        foundUser.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
         userRepo.save(foundUser);
         return "Password changed successfully";
     }
@@ -168,18 +180,18 @@ public class UserServiceImpl implements UserService{
     public String resetPassword(ResetPasswordRequest resetPasswordRequest) {
         AppUser foundUser = findByEmail(resetPasswordRequest.getEmail());
         ConfirmationToken foundToken = confirmationTokenService.getConfirmationToken(resetPasswordRequest.getToken())
-                .orElseThrow(()-> new IllegalStateException("such token does not exist"));
+                .orElseThrow(()-> new NiqueStoreException("such token does not exist"));
         if(foundToken.getExpiredAt().isBefore(LocalDateTime.now())){
-            throw new IllegalStateException("Token has expired");
+            throw new NiqueStoreException("Token has expired");
         }
         if (foundToken.getConfirmedAt() != null){
-            throw new IllegalStateException("Token has been used");
+            throw new NiqueStoreException("Token has been used");
         }
         confirmationTokenService.setConfirmedAt(resetPasswordRequest.getToken());
         if(!resetPasswordRequest.getNewPassword().equals(resetPasswordRequest.getConfirmNewPassword())) {throw
-                new IllegalStateException("passwords do not match");
+                new NiqueStoreException("passwords do not match");
         }
-        foundUser.setPassword(hashPassword(resetPasswordRequest.getNewPassword()));
+        foundUser.setPassword(passwordEncoder.encode(resetPasswordRequest.getNewPassword()));
         userRepo.save(foundUser);
         return "Password reset successfully";
     }
