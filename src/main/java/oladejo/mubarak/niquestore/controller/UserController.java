@@ -26,6 +26,10 @@ public class UserController {
     }
     @GetMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
-        return ResponseEntity.ok(userService.login(loginRequest));
+        try{
+            return ResponseEntity.ok(userService.login(loginRequest));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

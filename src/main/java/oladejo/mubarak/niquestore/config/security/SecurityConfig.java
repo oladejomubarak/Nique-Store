@@ -18,6 +18,8 @@ public class SecurityConfig {
     @Autowired
     private  AuthenticationProvider authenticationProvider;
 
+    private final String[] urls = {"/api/v1/products/search-products", "/api/v1/products/view"};
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -25,6 +27,8 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
+                .requestMatchers("/api/v1/vendor/**").hasAuthority("VENDOR")
+                .requestMatchers(urls).permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .anyRequest()
                 .authenticated()

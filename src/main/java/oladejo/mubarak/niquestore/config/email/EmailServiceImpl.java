@@ -14,6 +14,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+
 @Service
 @RequiredArgsConstructor
 @Async
@@ -30,14 +32,17 @@ public class EmailServiceImpl implements EmailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mailMessage, "Utf-8");
             mimeMessageHelper.setSubject("Confirm your email address");
             mimeMessageHelper.setTo(to);
-            mimeMessageHelper.setFrom("oladejomubarakade@gmail.com");
+            mimeMessageHelper.setFrom("oladejomubarakade@gmail.com", "Nique Store Enterprise");
             mimeMessageHelper.setText(email, true);
             javaMailSender.send(mailMessage);
         } catch (MessagingException e){
             log.info("Problem 1: " + e.getMessage());
             throw new RuntimeException(e);
         } catch (MailException e){
-            log.info("Problem 2" + e.getMessage());
+            log.info("Problem 2: " + e.getMessage());
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            log.info("problem 3: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
