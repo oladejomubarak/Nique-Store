@@ -13,7 +13,7 @@ import java.util.Set;
 public class AppUser {
     @Id
     private String id;
-    @Email
+    //@Email
     @NotBlank(message = "This field can't be empty")
     private String email;
     @NotBlank(message = "This field can't be empty")

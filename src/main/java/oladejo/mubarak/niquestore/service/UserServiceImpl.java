@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService{
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-
     @Override
     public AppUser findByEmail(String email){
         return userRepo.findAppUserByEmailIgnoreCase(email).orElseThrow(()-> new NiqueStoreException("user not found"));
@@ -61,7 +60,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String register(UserDto userDto) throws MessagingException {
-        boolean foundUser= userRepo.existsByEmailIgnoreCaseOrPhoneNumber(userDto.getEmail(), userDto.getPhoneNumber());
+        boolean foundUser = userRepo.existsByEmailIgnoreCaseOrPhoneNumber(userDto.getEmail(), userDto.getPhoneNumber());
         if(foundUser){throw new NiqueStoreException("email taken");}
 //        else {
             AppUser user = new AppUser();
