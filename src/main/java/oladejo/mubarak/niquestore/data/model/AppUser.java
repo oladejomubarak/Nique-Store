@@ -4,9 +4,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -27,4 +30,6 @@ public class AppUser {
     private String phoneNumber;
     private boolean isEnabled = false;
     private Set<Role> role;
+    @DBRef
+    private List<Product> cart = new ArrayList<>();
 }
