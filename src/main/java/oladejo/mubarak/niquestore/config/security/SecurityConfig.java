@@ -18,7 +18,7 @@ public class SecurityConfig {
     @Autowired
     private  AuthenticationProvider authenticationProvider;
 
-    private final String[] urls = {"/api/v1/products/search-products", "/api/v1/products/view"};
+    private final String[] urls = {"/api/v1/products/search-product", "/api/v1/products/view"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
