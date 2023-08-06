@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -88,8 +90,16 @@ public class ProductServiceImpl implements ProductService{
     }
     @Override
     public List<Product> findProductByKeyword(String keyword) {
-        List<Product> products = new ArrayList<>();
+        return findAllProducts()
+                .stream()
+                .filter(product -> product.getName().equalsIgnoreCase(keyword))
+                .filter(product -> product.getCategory().equalsIgnoreCase(keyword)).collect(Collectors.toList());
+//        List<Product> products = new ArrayList<>();
+//        for (Product product: findAllProducts()) {
+//            if (product.getCategory().equalsIgnoreCase(keyword) ||
+//                    product.getName().equalsIgnoreCase(keyword)) products.add(product);
+//        }
+//        return products;
 
-        return null;
     }
 }
