@@ -31,5 +31,5 @@ public class AppUser {
     private boolean isEnabled = false;
     private Set<Role> role;
     @DBRef
-    private List<Product> cart = new ArrayList<>();
+    private Cart cart;
 }
