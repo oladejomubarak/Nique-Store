@@ -8,6 +8,7 @@ import oladejo.mubarak.niquestore.data.model.Product;
 import oladejo.mubarak.niquestore.data.model.Role;
 import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.repository.ProductRepo;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,6 +19,8 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService{
     private final UserServiceImpl userService;
     private final ProductRepo productRepo;
+
+    private final ModelMapper modelMapper;
 
     @Override
     public Product addProduct(ProductDto productDto) {
@@ -35,12 +38,15 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Product findProduct(String productId) {
-        return null;
+        return productRepo.findById(productId).orElseThrow(()-> new NiqueStoreException("product not found"));
     }
 
     @Override
     public Product editProduct(String productId, ProductDto productDto) {
-        return null;
+        Product foundProduct = findProduct(productId);
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(productDto, foundProduct);
+        return productRepo.save(foundProduct);
     }
 
     @Override
