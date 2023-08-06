@@ -93,7 +93,8 @@ public class ProductServiceImpl implements ProductService{
         return findAllProducts()
                 .stream()
                 .filter(product -> product.getName().equalsIgnoreCase(keyword))
-                .filter(product -> product.getCategory().equalsIgnoreCase(keyword)).collect(Collectors.toList());
+                .filter(product -> product.getCategory().equalsIgnoreCase(keyword))
+                .collect(Collectors.toList());
 //        List<Product> products = new ArrayList<>();
 //        for (Product product: findAllProducts()) {
 //            if (product.getCategory().equalsIgnoreCase(keyword) ||
