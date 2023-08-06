@@ -11,6 +11,7 @@ public interface ProductService {
     Product findProduct(String productId);
     Product editProduct(String productId, ProductDto productDto);
     void deleteProduct(String productId);
+    List<Product> findAllProducts();
     List<Product> searchProductByName(String productName);
     List<Product> searchProductByCategory(String category);
     List<Product> findProductByVendor(String vendorEmail);

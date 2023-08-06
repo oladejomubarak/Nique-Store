@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
@@ -57,22 +58,29 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<Product> searchProductByName(String productName) {
+    public List<Product> findAllProducts() {
         return null;
+    }
+
+    @Override
+    public List<Product> searchProductByName(String productName) {
+        return productRepo.findByNameIgnoreCase(productName);
     }
 
     @Override
     public List<Product> searchProductByCategory(String category) {
-        return null;
+        return productRepo.findByCategoryIgnoreCase(category);
     }
 
     @Override
     public List<Product> findProductByVendor(String vendorEmail) {
-        return null;
+        AppUser foundUser = userService.findByEmail(vendorEmail);
+        return productRepo.findByVendor(foundUser);
     }
-
     @Override
     public List<Product> findProductByKeyword(String keyword) {
+        List<Product> products = new ArrayList<>();
+
         return null;
     }
 }
