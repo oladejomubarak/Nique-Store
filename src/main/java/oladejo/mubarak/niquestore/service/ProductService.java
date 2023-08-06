@@ -10,7 +10,7 @@ public interface ProductService {
     Product addProduct(ProductDto productDto);
     Product findProduct(String productId);
     Product editProduct(String productId, ProductDto productDto);
-    String deleteProduct(String productId);
+    void deleteProduct(String productId);
     List<Product> searchProductByName(String productName);
     List<Product> searchProductByCategory(String category);
     List<Product> findProductByVendor(String vendorEmail);
