@@ -13,5 +13,7 @@ public interface ProductService {
     String deleteProduct(String productId);
     List<Product> searchProductByName(String productName);
     List<Product> searchProductByCategory(String category);
+    List<Product> findProductByVendor(String vendorEmail);
+    List<Product> findProductByKeyword(String keyword);
 
 }
