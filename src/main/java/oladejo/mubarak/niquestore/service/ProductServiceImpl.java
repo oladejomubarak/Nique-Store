@@ -50,8 +50,9 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public String deleteProduct(String productId) {
-        return null;
+    public void deleteProduct(String productId) {
+        Product foundProduct = findProduct(productId);
+        productRepo.delete(foundProduct);
     }
 
     @Override
