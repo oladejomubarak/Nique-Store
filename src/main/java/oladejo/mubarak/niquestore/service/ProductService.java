@@ -6,4 +6,6 @@ import oladejo.mubarak.niquestore.data.model.Product;
 
 public interface ProductService {
     Product addProduct(ProductDto productDto);
+    Product findProduct(String productId);
+    Product editProduct(String productId, ProductDto productDto);
 }
