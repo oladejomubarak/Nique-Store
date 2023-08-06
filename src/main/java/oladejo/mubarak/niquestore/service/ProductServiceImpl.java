@@ -9,6 +9,9 @@ import oladejo.mubarak.niquestore.data.model.Role;
 import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.repository.ProductRepo;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -59,7 +62,13 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> findAllProducts() {
-        return null;
+        return productRepo.findAll();
+    }
+
+    @Override
+    public Page<Product> findProductsByPage(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return productRepo.findAll(pageable);
     }
 
     @Override

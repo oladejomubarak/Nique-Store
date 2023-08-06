@@ -3,6 +3,7 @@ package oladejo.mubarak.niquestore.service;
 
 import oladejo.mubarak.niquestore.data.dto.request.ProductDto;
 import oladejo.mubarak.niquestore.data.model.Product;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public interface ProductService {
     Product editProduct(String productId, ProductDto productDto);
     void deleteProduct(String productId);
     List<Product> findAllProducts();
+    Page<Product> findProductsByPage(int pageNo, int pageSize);
     List<Product> searchProductByName(String productName);
     List<Product> searchProductByCategory(String category);
     List<Product> findProductByVendor(String vendorEmail);
