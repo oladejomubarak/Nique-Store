@@ -1,5 +1,6 @@
 package oladejo.mubarak.niquestore.config.security;
 
+import lombok.RequiredArgsConstructor;
 import oladejo.mubarak.niquestore.service.SecuredUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@RequiredArgsConstructor
 public class AuthenticationConfig {
-    @Autowired
-    private SecuredUserService securedUserService;
+
+    private final SecuredUserService securedUserService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {

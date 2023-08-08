@@ -207,6 +207,11 @@ public class UserServiceImpl implements UserService{
         return "all tokens deleted";
     }
 
+    @Override
+    public void saveUser(AppUser appUser) {
+        userRepo.save(appUser);
+    }
+
     private String generateToken(){
         SecureRandom secureRandom = new SecureRandom();
         StringBuilder stringBuilder = new StringBuilder();

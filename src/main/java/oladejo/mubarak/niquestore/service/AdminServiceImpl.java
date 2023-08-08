@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import oladejo.mubarak.niquestore.data.model.AppUser;
 import oladejo.mubarak.niquestore.data.model.Role;
+import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,7 @@ import java.util.Set;
 public class AdminServiceImpl implements AdminService{
 
     private final PasswordEncoder passwordEncoder;
+    private final UserServiceImpl userService;
 
     private final UserRepo userRepo;
     @PostConstruct
@@ -38,7 +40,20 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public void registerVendor(String email) {
+        AppUser foundUser = userService.findByEmail(email);
+        if(foundUser.getRole().contains(Role.VENDOR)){ throw new NiqueStoreException("The user is already a vendor");
+        }
+        foundUser.getRole().add(Role.VENDOR);
+        userService.saveUser(foundUser);
+    }
 
+    @Override
+    public void removeVendor(String email) {
+        AppUser foundUser = userService.findByEmail(email);
+        if(!foundUser.getRole().contains(Role.VENDOR)){ throw new NiqueStoreException("The user is not a vendor");
+        }
+        foundUser.getRole().remove(Role.VENDOR);
+        userService.saveUser(foundUser);
     }
 
     @Override

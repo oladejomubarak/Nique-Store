@@ -1,5 +1,6 @@
 package oladejo.mubarak.niquestore.config.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,11 +13,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-    @Autowired
-    private  AuthenticationProvider authenticationProvider;
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final   AuthenticationProvider authenticationProvider;
 
     private final String[] urls = {"/api/v1/products/search-product", "/api/v1/products/view"};
 
@@ -38,8 +40,6 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
-
     }
 }

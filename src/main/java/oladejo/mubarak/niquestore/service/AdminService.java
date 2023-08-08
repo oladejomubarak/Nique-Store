@@ -7,5 +7,7 @@ import java.util.List;
 public interface AdminService {
     void saveUser();
     void registerVendor(String email);
+
+    void removeVendor(String email);
     List<AppUser> getAllUsers();
 }

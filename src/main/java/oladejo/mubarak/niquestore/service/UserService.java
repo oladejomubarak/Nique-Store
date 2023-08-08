@@ -17,4 +17,6 @@ public interface UserService {
     String resetPassword(ResetPasswordRequest resetPasswordRequest);
     String deleteUserByEmail(String email);
     String deleteAllTokens();
+    void saveUser(AppUser appUser);
+
 }
