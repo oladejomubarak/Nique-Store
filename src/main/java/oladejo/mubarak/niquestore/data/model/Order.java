@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 
 @Document
 @Data
@@ -13,8 +14,7 @@ public class Order {
     @Id
     private String id;
     private String productId;
-//    private String productCategories;
-    private BigDecimal unitPrice;
     private int quantity;
     private BigDecimal totalPrice;
+    private LocalDate deliveryDate;
 }
