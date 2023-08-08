@@ -1,12 +1,12 @@
 package oladejo.mubarak.niquestore.controller;
 import lombok.RequiredArgsConstructor;
+import oladejo.mubarak.niquestore.data.dto.request.CreateVendorRequest;
+import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.service.AdminServiceImpl;
 import oladejo.mubarak.niquestore.service.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/admin/")
@@ -18,5 +18,25 @@ public class AdminController {
     @GetMapping("/all-users")
     public ResponseEntity<?> getAllUsers(){
         return ResponseEntity.ok(adminService.getAllUsers());
+    }
+
+    @PatchMapping("add-vendor")
+    public ResponseEntity<?> registerVendor(@RequestBody CreateVendorRequest createVendorRequest){
+        try{
+            adminService.registerVendor(createVendorRequest);
+            return ResponseEntity.ok("The user has successfully been registered as vendor");
+        }catch (NiqueStoreException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("remove-vendor")
+    public ResponseEntity<?> removeVendor(@RequestBody CreateVendorRequest createVendorRequest){
+        try{
+            adminService.removeVendor((createVendorRequest));
+            return ResponseEntity.ok("The user has successfully been unregistered as vendor");
+        }catch (NiqueStoreException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

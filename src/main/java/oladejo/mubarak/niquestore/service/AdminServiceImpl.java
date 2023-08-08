@@ -3,6 +3,7 @@ package oladejo.mubarak.niquestore.service;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import oladejo.mubarak.niquestore.data.dto.request.CreateVendorRequest;
 import oladejo.mubarak.niquestore.data.model.AppUser;
 import oladejo.mubarak.niquestore.data.model.Role;
 import oladejo.mubarak.niquestore.exception.NiqueStoreException;
@@ -39,8 +40,8 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public void registerVendor(String email) {
-        AppUser foundUser = userService.findByEmail(email);
+    public void registerVendor(CreateVendorRequest createVendorRequest) {
+        AppUser foundUser = userService.findByEmail(createVendorRequest.getVendorEmail());
         if(foundUser.getRole().contains(Role.VENDOR)){ throw new NiqueStoreException("The user is already a vendor");
         }
         foundUser.getRole().add(Role.VENDOR);
@@ -48,8 +49,8 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public void removeVendor(String email) {
-        AppUser foundUser = userService.findByEmail(email);
+    public void removeVendor(CreateVendorRequest  createVendorRequest) {
+        AppUser foundUser = userService.findByEmail(createVendorRequest.getVendorEmail());
         if(!foundUser.getRole().contains(Role.VENDOR)){ throw new NiqueStoreException("The user is not a vendor");
         }
         foundUser.getRole().remove(Role.VENDOR);
