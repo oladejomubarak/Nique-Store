@@ -47,4 +47,11 @@ public class OrderServiceImpl implements OrderService{
     public void cancelOrder(String orderId) {
 
     }
+
+    private BigDecimal getDiscount(BigDecimal amount){
+        BigDecimal percent = new BigDecimal("0.03");
+
+        BigDecimal discount = amount.multiply(percent);
+        return amount.subtract(discount);
+    }
 }
