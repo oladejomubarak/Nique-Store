@@ -13,6 +13,7 @@ public class Product {
     private String id;
     private String name;
     private String category;
+    private String description;
     private AppUser vendor;
     private BigDecimal price;
     private int quantity;

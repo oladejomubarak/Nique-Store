@@ -12,6 +12,7 @@ public interface ProductService {
     Product findProduct(String productId);
     Product editProduct(String productId, ProductDto productDto);
     void deleteProduct(String productId);
+    void saveProduct(Product product);
     List<Product> findAllProducts();
     Page<Product> findProductsByPage(int pageNo, int pageSize);
     List<Product> searchProductByName(String productName);

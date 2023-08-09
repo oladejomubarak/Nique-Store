@@ -17,5 +17,6 @@ public class ProductDto {
     private double price;
     @NotBlank
     private int quantity;
+    private String description;
     private String storeAddress;
 }

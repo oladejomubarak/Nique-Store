@@ -38,6 +38,7 @@ public class ProductServiceImpl implements ProductService{
         product.setCategory(productDto.getCategory());
         product.setPrice(BigDecimal.valueOf(productDto.getPrice()));
         product.setQuantity(productDto.getQuantity());
+        product.setDescription(productDto.getDescription());
         product.setStoreAddress(productDto.getStoreAddress());
         product.setVendor(foundUser);
         return productRepo.save(product);
@@ -60,6 +61,11 @@ public class ProductServiceImpl implements ProductService{
     public void deleteProduct(String productId) {
         Product foundProduct = findProduct(productId);
         productRepo.delete(foundProduct);
+    }
+
+    @Override
+    public void saveProduct(Product product) {
+        productRepo.save(product);
     }
 
     @Override

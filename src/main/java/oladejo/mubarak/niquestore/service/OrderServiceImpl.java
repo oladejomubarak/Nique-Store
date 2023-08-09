@@ -39,6 +39,8 @@ public class OrderServiceImpl implements OrderService{
         if(totalPrice.compareTo(BigDecimal.valueOf(50000)) >= 0){
             order.setTotalPrice(getDiscount(totalPrice));
         }
+        foundProduct.setQuantity(foundProduct.getQuantity() - orderProductRequest.getQuantity());
+        productService.saveProduct(foundProduct);
         return orderRepo.save(order);
     }
 
@@ -62,8 +64,14 @@ public class OrderServiceImpl implements OrderService{
                 "You ordered "+orderProductRequest.getQuantity()+", but only "+foundProduct.getQuantity()+" are left");
         }
         Order order = new Order();
-
-        return null;
+        order.setProduct(foundProduct);
+        order.setQuantity(orderProductRequest.getQuantity());
+        order.setTotalPrice(foundProduct.getPrice().multiply(BigDecimal.valueOf(orderProductRequest.getQuantity())));
+        orderRepo.save(order);
+        foundUser.getCart().getOrderList().add(order);
+        //foundUser.getCart().setAmountToPay(order.getTotalPrice());
+        userService.saveUser(foundUser);
+        return foundUser.getCart().getOrderList();
     }
     @Override
     public void removeOrderFromCart(String customerEmail, String orderId) {

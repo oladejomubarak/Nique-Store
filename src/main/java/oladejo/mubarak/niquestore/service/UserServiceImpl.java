@@ -7,6 +7,7 @@ import oladejo.mubarak.niquestore.config.email.EmailService;
 import oladejo.mubarak.niquestore.config.security.JwtService;
 import oladejo.mubarak.niquestore.data.dto.request.*;
 import oladejo.mubarak.niquestore.data.model.AppUser;
+import oladejo.mubarak.niquestore.data.model.Cart;
 import oladejo.mubarak.niquestore.data.model.ConfirmationToken;
 import oladejo.mubarak.niquestore.data.model.Role;
 import oladejo.mubarak.niquestore.exception.NiqueStoreException;
@@ -43,6 +44,8 @@ public class UserServiceImpl implements UserService{
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
+    private final CartService cartService;
+
     @Override
     public AppUser findByEmail(String email){
         return userRepo.findAppUserByEmailIgnoreCase(email).orElseThrow(()-> new NiqueStoreException("user not found"));
@@ -76,7 +79,11 @@ public class UserServiceImpl implements UserService{
             user.setPassword(passwordEncoder.encode(userDto.getConfirmPassword()));
             if (!userDto.getPassword().equals(userDto.getConfirmPassword()))
                 throw new NiqueStoreException("passwords do not match");
+            Cart cart = new Cart();
+            user.setCart(cart);
+            cartService.saveCart(cart);
             userRepo.save(user);
+
             String token = generateToken();
             emailService.send(userDto.getEmail(), buildEmail(userDto.getFirstname(),
                     token));

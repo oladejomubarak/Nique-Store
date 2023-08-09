@@ -1,7 +1,10 @@
 package oladejo.mubarak.niquestore.data.model;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -17,5 +20,7 @@ public class Order {
     private int quantity;
     private BigDecimal totalPrice;
     private LocalDate deliveryDate;
+    @DBRef
+    @ManyToOne(fetch = FetchType.LAZY)
     private AppUser user;
 }

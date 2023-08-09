@@ -1,5 +1,6 @@
 package oladejo.mubarak.niquestore.data.model;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

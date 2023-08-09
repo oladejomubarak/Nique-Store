@@ -1,6 +1,8 @@
 package oladejo.mubarak.niquestore.data.model;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,8 +17,8 @@ import java.util.List;
 public class Cart {
     @Id
     private String id;
-    @DBRef
-    private AppUser appUser;
+//    @DBRef
+//    private AppUser appUser;
     @DBRef
     private List<Order> orderList = new ArrayList<>();
     private BigDecimal amountToPay;
