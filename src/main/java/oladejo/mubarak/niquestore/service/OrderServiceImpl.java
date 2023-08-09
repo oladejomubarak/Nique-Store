@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService{
         Order order = new Order();
         order.setUser(foundUser);
         order.setProduct(foundProduct);
-        order.setDeliveryDate(LocalDate.now());
+        order.setDeliveryDate(LocalDate.now().plusDays(1));
         order.setQuantity(orderProductRequest.getQuantity());
         order.setTotalPrice(totalPrice);
         if(totalPrice.compareTo(BigDecimal.valueOf(50000)) >= 0){
@@ -43,12 +43,15 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Order findOrder(String orderId) {
-        return null;
+        return orderRepo.findById(orderId).orElseThrow(()-> new NiqueStoreException("order not found"));
     }
 
     @Override
     public void cancelOrder(String orderId) {
-
+        Order foundOrder = findOrder(orderId);
+        if(foundOrder.getDeliveryDate().equals(LocalDate.now())) {throw new NiqueStoreException("" +
+                "You can't cancel order on the delivery date");}
+        orderRepo.delete(foundOrder);
     }
 
     private BigDecimal getDiscount(BigDecimal amount){
