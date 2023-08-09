@@ -28,13 +28,16 @@ public class OrderServiceImpl implements OrderService{
                 "You ordered "+orderProductRequest.getQuantity()+", but only "+foundProduct.getQuantity()+" are left");
         }
         BigDecimal totalPrice = foundProduct.getPrice().multiply(BigDecimal.valueOf(orderProductRequest.getQuantity()));
+
         Order order = new Order();
         order.setUser(foundUser);
         order.setProduct(foundProduct);
         order.setDeliveryDate(LocalDate.now());
         order.setQuantity(orderProductRequest.getQuantity());
         order.setTotalPrice(totalPrice);
-
+        if(totalPrice.compareTo(BigDecimal.valueOf(50000)) >= 0){
+            order.setTotalPrice(getDiscount(totalPrice));
+        }
         return orderRepo.save(order);
     }
 
@@ -50,7 +53,6 @@ public class OrderServiceImpl implements OrderService{
 
     private BigDecimal getDiscount(BigDecimal amount){
         BigDecimal percent = new BigDecimal("0.03");
-
         BigDecimal discount = amount.multiply(percent);
         return amount.subtract(discount);
     }
