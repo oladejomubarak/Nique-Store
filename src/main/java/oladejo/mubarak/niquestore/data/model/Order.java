@@ -13,8 +13,9 @@ import java.time.LocalDate;
 public class Order {
     @Id
     private String id;
-    private String productId;
+    private Product product;
     private int quantity;
     private BigDecimal totalPrice;
     private LocalDate deliveryDate;
+    private AppUser user;
 }
