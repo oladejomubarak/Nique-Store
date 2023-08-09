@@ -35,8 +35,7 @@ public class OrderServiceImpl implements OrderService{
         order.setQuantity(orderProductRequest.getQuantity());
         order.setTotalPrice(totalPrice);
 
-
-        return null;
+        return orderRepo.save(order);
     }
 
     @Override
