@@ -56,6 +56,13 @@ public class OrderServiceImpl implements OrderService{
     }
     @Override
     public List<Order> addOrderToCart(OrderProductRequest orderProductRequest) {
+        AppUser foundUser = userService.findByEmail(orderProductRequest.getCustomerEmail());
+        Product foundProduct = productService.findProduct(orderProductRequest.getProductId());
+        if(orderProductRequest.getQuantity() > foundProduct.getQuantity()) {throw new NiqueStoreException("" +
+                "You ordered "+orderProductRequest.getQuantity()+", but only "+foundProduct.getQuantity()+" are left");
+        }
+        Order order = new Order();
+
         return null;
     }
     @Override
