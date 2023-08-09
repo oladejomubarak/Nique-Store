@@ -37,4 +37,14 @@ public class OrderController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @DeleteMapping("cancel/{id}")
+    public ResponseEntity<?> cancelOrder(@PathVariable String id){
+        try{
+            orderService.cancelOrder(id);
+            return ResponseEntity.ok("Your order has been successfully canceled");
+        } catch (NiqueStoreException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
