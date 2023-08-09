@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -52,6 +53,19 @@ public class OrderServiceImpl implements OrderService{
         if(foundOrder.getDeliveryDate().equals(LocalDate.now())) {throw new NiqueStoreException("" +
                 "You can't cancel order on the delivery date");}
         orderRepo.delete(foundOrder);
+    }
+    @Override
+    public List<Order> addOrderToCart(OrderProductRequest orderProductRequest) {
+        return null;
+    }
+    @Override
+    public void removeOrderFromCart(String customerEmail, String orderId) {
+
+    }
+
+    @Override
+    public List<Order> orderFromCart(String customerEmail) {
+        return null;
     }
 
     private BigDecimal getDiscount(BigDecimal amount){

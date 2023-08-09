@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Document
@@ -16,4 +17,5 @@ public class Cart {
     @DBRef
     private List<Order> orderList;
     private BigDecimal amountToPay;
+    private LocalDate deliveryDate;
 }
