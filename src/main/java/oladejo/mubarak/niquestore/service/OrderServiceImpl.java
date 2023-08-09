@@ -10,6 +10,7 @@ import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.repository.OrderRepo;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Service
@@ -26,11 +27,13 @@ public class OrderServiceImpl implements OrderService{
         if(orderProductRequest.getQuantity() > foundProduct.getQuantity()) {throw new NiqueStoreException("" +
                 "You ordered "+orderProductRequest.getQuantity()+", but only "+foundProduct.getQuantity()+" are left");
         }
+        BigDecimal totalPrice = foundProduct.getPrice().multiply(BigDecimal.valueOf(orderProductRequest.getQuantity()));
         Order order = new Order();
         order.setUser(foundUser);
         order.setProduct(foundProduct);
         order.setDeliveryDate(LocalDate.now());
         order.setQuantity(orderProductRequest.getQuantity());
+        order.setTotalPrice(totalPrice);
 
 
         return null;
