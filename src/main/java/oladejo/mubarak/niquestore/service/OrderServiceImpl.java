@@ -63,11 +63,14 @@ public class OrderServiceImpl implements OrderService{
         if(orderProductRequest.getQuantity() > foundProduct.getQuantity()) {throw new NiqueStoreException("" +
                 "You ordered "+orderProductRequest.getQuantity()+", but only "+foundProduct.getQuantity()+" are left");
         }
+        foundProduct.setVendor(null);
         Order order = new Order();
+        order.setUser(foundUser);
         order.setProduct(foundProduct);
         order.setQuantity(orderProductRequest.getQuantity());
         order.setTotalPrice(foundProduct.getPrice().multiply(BigDecimal.valueOf(orderProductRequest.getQuantity())));
         orderRepo.save(order);
+        order.setUser(null);
         foundUser.getCart().getOrderList().add(order);
         //foundUser.getCart().setAmountToPay(order.getTotalPrice());
         userService.saveUser(foundUser);
