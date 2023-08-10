@@ -78,11 +78,25 @@ public class OrderServiceImpl implements OrderService{
     }
     @Override
     public void removeOrderFromCart(String customerEmail, String orderId) {
-
+        AppUser foundUser = userService.findByEmail(customerEmail);
+        Order foundOder = findOrder(orderId);
+        foundUser.
+                getCart()
+                .getOrderList()
+                .forEach(order -> {
+            if(order.equals(foundOder)) foundUser.getCart().getOrderList().remove(foundOder);
+            orderRepo.delete(foundOder);
+            userService.saveUser(foundUser);
+        });
     }
 
     @Override
     public List<Order> orderFromCart(String customerEmail) {
+        AppUser foundUser = userService.findByEmail(customerEmail);
+        foundUser.getCart().getOrderList().forEach(order -> {
+            foundUser.getCart().setAmountToPay((order.getTotalPrice()));
+            userService.saveUser(foundUser);
+        });
         return null;
     }
 
