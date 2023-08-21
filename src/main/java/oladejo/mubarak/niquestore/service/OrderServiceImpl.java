@@ -94,10 +94,15 @@ public class OrderServiceImpl implements OrderService{
     public List<Order> orderFromCart(String customerEmail) {
         AppUser foundUser = userService.findByEmail(customerEmail);
         foundUser.getCart().getOrderList().forEach(order -> {
-            foundUser.getCart().setAmountToPay((order.getTotalPrice()));
+            foundUser.getCart().setAmountToPay(foundUser.getCart().getAmountToPay().add(order.getTotalPrice()));
             userService.saveUser(foundUser);
         });
-        return null;
+        foundUser.getCart().setDeliveryDate(LocalDate.now().plusDays(1));
+        if(foundUser.getCart().getAmountToPay().compareTo(BigDecimal.valueOf(50000)) >= 0 ){
+            foundUser.getCart().setAmountToPay(getDiscount(foundUser.getCart().getAmountToPay()));
+            userService.saveUser(foundUser);
+        }
+        return foundUser.getCart().getOrderList();
     }
 
     private BigDecimal getDiscount(BigDecimal amount){
