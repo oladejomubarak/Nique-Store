@@ -20,6 +20,7 @@ public class Order {
     private int quantity;
     private BigDecimal totalPrice;
     private LocalDate deliveryDate;
+    private PaymentStatus paymentStatus;
     @DBRef
     @ManyToOne(fetch = FetchType.LAZY)
     private AppUser user;

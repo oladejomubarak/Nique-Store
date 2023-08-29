@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import oladejo.mubarak.niquestore.data.dto.request.OrderProductRequest;
 import oladejo.mubarak.niquestore.data.model.AppUser;
 import oladejo.mubarak.niquestore.data.model.Order;
+import oladejo.mubarak.niquestore.data.model.PaymentStatus;
 import oladejo.mubarak.niquestore.data.model.Product;
 import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.repository.OrderRepo;
@@ -91,7 +92,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> orderFromCart(String customerEmail) {
+    public BigDecimal orderFromCart(String customerEmail) {
         AppUser foundUser = userService.findByEmail(customerEmail);
 
 //        BigDecimal totalPrice = BigDecimal.ZERO;
@@ -108,11 +109,12 @@ public class OrderServiceImpl implements OrderService{
 
 
         foundUser.getCart().setDeliveryDate(LocalDate.now().plusDays(1));
+        foundUser.getCart().setPaymentStatus(PaymentStatus.PENDING);
         if(foundUser.getCart().getAmountToPay().compareTo(BigDecimal.valueOf(50000)) >= 0 ){
             foundUser.getCart().setAmountToPay(getDiscount(foundUser.getCart().getAmountToPay()));
             userService.saveUser(foundUser);
         }
-        return foundUser.getCart().getOrderList();
+        return foundUser.getCart().getAmountToPay();
     }
 
     private BigDecimal getDiscount(BigDecimal amount){

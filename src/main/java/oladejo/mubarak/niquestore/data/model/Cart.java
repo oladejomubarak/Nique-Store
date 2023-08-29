@@ -23,4 +23,5 @@ public class Cart {
     private List<Order> orderList = new ArrayList<>();
     private BigDecimal amountToPay;
     private LocalDate deliveryDate;
+    private PaymentStatus paymentStatus;
 }
