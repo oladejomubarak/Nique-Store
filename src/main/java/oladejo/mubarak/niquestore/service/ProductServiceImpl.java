@@ -92,8 +92,8 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> findProductByVendor(String vendorEmail) {
-        AppUser foundUser = userService.findByEmail(vendorEmail);
-        return productRepo.findByVendor(foundUser);
+        AppUser foundVendor = userService.findByEmail(vendorEmail);
+        return productRepo.findByVendor(foundVendor);
     }
     @Override
     public List<Product> findProductByKeyword(String keyword) {
