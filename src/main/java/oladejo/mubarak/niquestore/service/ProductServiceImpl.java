@@ -39,6 +39,7 @@ public class ProductServiceImpl implements ProductService{
         product.setPrice(BigDecimal.valueOf(productDto.getPrice()));
         product.setQuantity(productDto.getQuantity());
         product.setDescription(productDto.getDescription());
+        product.setProductImageUrl(product.getProductImageUrl());
         product.setStoreAddress(productDto.getStoreAddress());
         product.setVendor(foundUser);
         return productRepo.save(product);

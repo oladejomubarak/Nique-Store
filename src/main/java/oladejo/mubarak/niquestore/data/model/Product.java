@@ -17,5 +17,6 @@ public class Product {
     private AppUser vendor;
     private BigDecimal price;
     private int quantity;
+    private String productImageUrl;
     private String storeAddress;
 }
