@@ -14,7 +14,7 @@ public class PaymentService {
     private final UserServiceImpl userService;
 private final String pay_stack_key = System.getenv("PAY_STACK_SECRET_KEY");
 
-    public String initiatePayment(String customerEmail) throws Exception {
+    public void initiatePaymentForCart(String customerEmail) throws Exception {
         AppUser foundUser = userService.findByEmail(customerEmail);
         OkHttpClient client = new OkHttpClient();
 
@@ -30,9 +30,20 @@ private final String pay_stack_key = System.getenv("PAY_STACK_SECRET_KEY");
                 .addHeader("Authorization", "Bearer " + pay_stack_key)
                 .addHeader("Content-Type", "application/json")
                 .build();
-
+            String paymentDetails = "";
         try (ResponseBody response = client.newCall(request).execute().body()) {
-            return response.string();
+            paymentDetails += response.string();
         }
+
+    }
+
+    private String buildPaymentEmail(String firstname, String paymentDetails){
+        return "Here is your payment details" +
+                "                                   " +
+                "                                       " +
+                "<p>Hello \"" + firstname + "\",</p>" +
+                "<p>Your payment was successfully processed</p>" +
+                "<p>Below is your payment details" +
+                "<p>\"" + paymentDetails + "\"</p>";
     }
 }

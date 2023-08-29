@@ -299,7 +299,7 @@ public class UserServiceImpl implements UserService{
     }
     private String buildForgotPasswordEmail (String lastName, String token){
         return "Here's the link to reset your password"
-                + "                                      "
+                + "                                     "
                 + "                                        "
                 + "<p>Hello \"" + lastName + "\",</p>"
                 + "<p>You have requested to reset your password.</p>"
