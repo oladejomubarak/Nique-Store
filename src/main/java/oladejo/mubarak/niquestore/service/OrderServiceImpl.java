@@ -93,8 +93,9 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<Order> orderFromCart(String customerEmail) {
         AppUser foundUser = userService.findByEmail(customerEmail);
+        BigDecimal totalAmount = BigDecimal.ZERO;
         foundUser.getCart().getOrderList().forEach(order -> {
-            foundUser.getCart().setAmountToPay(foundUser.getCart().getAmountToPay().add(order.getTotalPrice()));
+            foundUser.getCart().setAmountToPay(totalAmount.add(order.getTotalPrice()));
             userService.saveUser(foundUser);
         });
         foundUser.getCart().setDeliveryDate(LocalDate.now().plusDays(1));
