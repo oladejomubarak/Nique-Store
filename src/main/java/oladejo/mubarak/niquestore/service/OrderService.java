@@ -10,7 +10,8 @@ public interface OrderService {
   Order orderProduct(OrderProductRequest orderProductRequest);
   Order findOrder(String orderId);
   void cancelOrder(String orderId);
+  List<Order>findAllOrders();
   List<Order> addOrderToCart(OrderProductRequest orderProductRequest);
   void removeOrderFromCart(String customerEmail, String orderId);
-  BigDecimal orderFromCart(String customerEmail);
+  BigDecimal checkout(String customerEmail);
 }

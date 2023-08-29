@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService{
         order.setDeliveryDate(LocalDate.now().plusDays(1));
         order.setQuantity(orderProductRequest.getQuantity());
         order.setTotalPrice(totalPrice);
+        order.setPaymentStatus(PaymentStatus.PENDING);
         if(totalPrice.compareTo(BigDecimal.valueOf(50000)) >= 0){
             order.setTotalPrice(getDiscount(totalPrice));
         }
@@ -57,6 +58,12 @@ public class OrderServiceImpl implements OrderService{
                 "You can't cancel order on the delivery date");}
         orderRepo.delete(foundOrder);
     }
+
+    @Override
+    public List<Order> findAllOrders() {
+        return orderRepo.findAll();
+    }
+
     @Override
     public List<Order> addOrderToCart(OrderProductRequest orderProductRequest) {
         AppUser foundUser = userService.findByEmail(orderProductRequest.getCustomerEmail());
@@ -92,7 +99,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public BigDecimal orderFromCart(String customerEmail) {
+    public BigDecimal checkout(String customerEmail) {
         AppUser foundUser = userService.findByEmail(customerEmail);
 
 //        BigDecimal totalPrice = BigDecimal.ZERO;
