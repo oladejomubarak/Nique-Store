@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     private final   AuthenticationProvider authenticationProvider;
 
-    private final String[] urls = {"/api/v1/products/search-product", "/api/v1/products/view"};
+    private final String[] vendorUrls = {"/api/v1/product/add", "/api/v1/products/view"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

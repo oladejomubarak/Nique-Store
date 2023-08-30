@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductServiceImpl productService;
@@ -24,14 +24,7 @@ public class ProductController {
         Page<Product> productsPage = productService.findProductsByPage(pageNo, pageSize);
         return ResponseEntity.ok(productsPage);
     }
-    @PostMapping("add")
-    public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto){
-        try {
-            return ResponseEntity.ok(productService.addProduct(productDto));
-        } catch (NiqueStoreException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+
 
     @GetMapping("product/{id}")
     public ResponseEntity<?> findProduct(@PathVariable String id){
@@ -41,24 +34,7 @@ public class ProductController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @PatchMapping("update/{productId}")
-    public ResponseEntity<?> editProduct(@PathVariable String productId, @RequestBody ProductDto productDto){
-        try {
-            return ResponseEntity.ok(productService.editProduct(productId, productDto));
-        } catch (NiqueStoreException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 
-    @DeleteMapping("delete/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable String productId){
-        try {
-            productService.deleteProduct(productId);
-            return ResponseEntity.ok("Product deleted successfully");
-        } catch (NiqueStoreException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
     @GetMapping("search-by-name")
     public ResponseEntity<?> searchProductByName(@RequestParam String productName){
     try {
