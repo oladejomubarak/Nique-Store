@@ -22,7 +22,7 @@ public class PaymentController {
     public ResponseEntity<?> payForCartOrder(@PathVariable String customerId){
         try{
             ApiResponse apiResponse = ApiResponse.builder()
-                    .message("Payment successful")
+                    .message("Payment Initiated")
                     .data(paymentService.initiatePaymentForCart(customerId))
                     .status(HttpStatus.OK.value())
                     .build();
@@ -32,12 +32,12 @@ public class PaymentController {
         }
     }
 
-    @PostMapping("cart/{customerEmail}/{orderId}")
-    @PatchMapping("cart/{customerEmail}/{orderId}")
+    @PostMapping("order/{customerEmail}/{orderId}")
+    @PatchMapping("order/{customerEmail}/{orderId}")
     public ResponseEntity<?> payForSingleOrder(@PathVariable String customerEmail, @PathVariable String orderId){
         try{
             ApiResponse apiResponse = ApiResponse.builder()
-                    .message("Payment successful")
+                    .message("Payment Initiated")
                     .data(paymentService.initiatePaymentForSingleOrder(customerEmail, orderId))
                     .status(HttpStatus.OK.value())
                     .build();

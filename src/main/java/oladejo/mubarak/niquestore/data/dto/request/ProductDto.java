@@ -8,14 +8,10 @@ import java.math.BigDecimal;
 
 @Data
 public class ProductDto {
-    @NotBlank
     private String productName;
     private String category;
-    @NotBlank
     private String vendorEmail;
-    @NotBlank
     private double price;
-    @NotBlank
     private int quantity;
     private String productImageUrl;
     private String description;

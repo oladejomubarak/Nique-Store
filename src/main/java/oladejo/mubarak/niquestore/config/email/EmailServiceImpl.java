@@ -46,4 +46,27 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void sendPaymentEmail(String email, String message) throws MessagingException{
+        try{
+            MimeMessage mailMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mailMessage, "Utf-8");
+            mimeMessageHelper.setSubject("Complete your payment");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setFrom("oladejomubarakade@gmail.com", "Nique Store Enterprise");
+            mimeMessageHelper.setText(message, true);
+            javaMailSender.send(mailMessage);
+        } catch (MessagingException e){
+            log.info("Problem 1: " + e.getMessage());
+            throw new RuntimeException(e);
+        } catch (MailException e){
+            log.info("Problem 2: " + e.getMessage());
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            log.info("problem 3: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+    }
 }

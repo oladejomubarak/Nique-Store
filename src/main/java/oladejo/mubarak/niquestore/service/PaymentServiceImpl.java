@@ -7,6 +7,7 @@ import oladejo.mubarak.niquestore.config.email.EmailServiceImpl;
 import oladejo.mubarak.niquestore.data.model.AppUser;
 import oladejo.mubarak.niquestore.data.model.Order;
 import oladejo.mubarak.niquestore.data.model.PaymentStatus;
+import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -43,7 +44,7 @@ public class PaymentServiceImpl implements PaymentService{
         try (ResponseBody response = client.newCall(request).execute().body()) {
             paymentDetails += response.string();
         }
-        emailService.send(foundUser.getEmail(),buildPaymentEmail(foundUser.getFirstname(),
+        emailService.sendPaymentEmail(foundUser.getEmail(),buildPaymentEmail(foundUser.getFirstname(),
                 paymentDetails,
                 foundUser.getCart().getDeliveryDate()));
         foundUser.getCart().setPaymentStatus(PaymentStatus.SUCCESS);
@@ -54,13 +55,15 @@ public class PaymentServiceImpl implements PaymentService{
         foundUser.getCart().getOrderList().clear();
         userService.saveUser(foundUser);
 
-        return "Payment Successful";
+        return "Payment initiated, please check your email to complete your payment";
     }
     @Override
     public String initiatePaymentForSingleOrder(String customerEmail, String orderId)throws Exception{
         Order foundOrder = orderService.findOrder(orderId);
+        if(foundOrder.getPaymentStatus().equals(PaymentStatus.SUCCESS)){
+            throw new NiqueStoreException("This order has already been paid for");
+        }
         AppUser foundCustomer = userService.findByEmail(customerEmail);
-
 
         RequestBody paymentBody = RequestBody.create(mediaType,
                 "{\"amount\":" + foundOrder .getTotalPrice() + "," +
@@ -77,12 +80,12 @@ public class PaymentServiceImpl implements PaymentService{
         try (ResponseBody response = client.newCall(request).execute().body()) {
             paymentDetails += response.string();
         }
-        emailService.send(foundCustomer.getEmail(),buildPaymentEmail(foundCustomer.getFirstname(),
+        emailService.sendPaymentEmail(foundCustomer.getEmail(),buildPaymentEmail(foundCustomer.getFirstname(),
                 paymentDetails,
                 foundOrder.getDeliveryDate()));
         foundOrder.setPaymentStatus(PaymentStatus.SUCCESS);
         orderService.saveOrder(foundOrder);
-        return "Payment Successful";
+        return "Payment initiated, please check your email to complete your payment";
     }
 
     private String buildPaymentEmail(String firstname, String paymentDetails, LocalDate deliveryDate){
@@ -91,7 +94,7 @@ public class PaymentServiceImpl implements PaymentService{
                 "                                       " +
                 "<p>Hello \"" + firstname + "\",</p>" +
                 "<p>Your payment was successfully processed</p>" +
-                "<p>Below is your payment details" +
+                "<p>Click the link provided below to complete your payment" +
                 "<p>\"" + paymentDetails + "\"</p>" +
                 "<br>" +
                 "<p>Your order will be delivered on \"" + deliveryDate + "\"</p>" +

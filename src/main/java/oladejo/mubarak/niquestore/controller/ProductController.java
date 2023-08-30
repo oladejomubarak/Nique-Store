@@ -18,7 +18,7 @@ public class ProductController {
     private final ProductServiceImpl productService;
 
     @GetMapping("products")
-    public ResponseEntity<Page<Product>> getProducts(
+    public ResponseEntity<?> getProducts(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
         Page<Product> productsPage = productService.findProductsByPage(pageNo, pageSize);

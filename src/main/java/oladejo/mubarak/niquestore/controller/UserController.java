@@ -31,8 +31,8 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @PatchMapping("confirm-password")
-    public ResponseEntity<?> confirmPassword(@RequestBody ConfirmationTokenRequest confirmationTokenRequest){
+    @PatchMapping("confirm-token")
+    public ResponseEntity<?> confirmToken(@RequestBody ConfirmationTokenRequest confirmationTokenRequest){
         try{
             return ResponseEntity.ok(userService.confirmToken(confirmationTokenRequest));
         } catch (NiqueStoreException e){
