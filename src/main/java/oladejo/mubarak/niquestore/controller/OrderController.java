@@ -46,5 +46,37 @@ public class OrderController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @PostMapping("cart/add")
+    @PatchMapping("cart/add")
+    public ResponseEntity<?> addToCart(@RequestBody OrderProductRequest orderProductRequest){
+        try{
+            ApiResponse apiResponse = ApiResponse.builder()
+                    .message("You order has been placed successfully, pls proceed to payment")
+                    .data(orderService.addOrderToCart(orderProductRequest))
+                    .status(HttpStatus.OK.value())
+                    .build();
+            return ResponseEntity.ok(apiResponse);
+        } catch (NiqueStoreException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @DeleteMapping("cart/remove/{customerEmail}")
+    public ResponseEntity<?> removeFromCart(@PathVariable String customerEmail, @RequestParam String orderId){
+        try{
+            orderService.removeOrderFromCart(customerEmail, orderId);
+            return ResponseEntity.ok("Order has been removed from cart");
+        } catch (NiqueStoreException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("cart/checkout/{customerEmail}")
+    public ResponseEntity<?> checkout(@PathVariable String customerEmail){
+        try{
+            return ResponseEntity.ok(orderService.checkout(customerEmail));
+        } catch (NiqueStoreException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }
