@@ -9,11 +9,23 @@ import org.springframework.scheduling.annotation.Scheduled;
 @RequiredArgsConstructor
 public class Scheduler {
     private final ConfirmationTokenService confirmationTokenService;
-    private final Scheduler scheduler;
+    private final OrderRetrieval orderRetrieval;
 
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredToken(){
-        System.out.println("TOKEN DELETED");
         confirmationTokenService.deleteExpiredToken();
+        System.out.println("TOKEN DELETED");
     }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void retrieveSingleOrder(){
+        orderRetrieval.retrieveFailedOrder();
+        System.out.println("Retrieve single order method called");
+    }
+    @Scheduled(cron = "0 0 0 * * *")
+    public void retrieveOrderFromCart(){
+        orderRetrieval.retrieveFailedOrderFromCart();
+        System.out.println("Retrieve order from cart method called");
+    }
+
 }

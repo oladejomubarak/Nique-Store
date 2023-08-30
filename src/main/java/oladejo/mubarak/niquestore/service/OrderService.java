@@ -14,4 +14,6 @@ public interface OrderService {
   List<Order> addOrderToCart(OrderProductRequest orderProductRequest);
   void removeOrderFromCart(String customerEmail, String orderId);
   BigDecimal checkout(String customerEmail);
+
+  void saveOrder(Order order);
 }

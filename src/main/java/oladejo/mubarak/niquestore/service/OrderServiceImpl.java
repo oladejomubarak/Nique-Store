@@ -125,6 +125,11 @@ public class OrderServiceImpl implements OrderService{
         return foundUser.getCart().getAmountToPay();
     }
 
+    @Override
+    public void saveOrder(Order order) {
+        orderRepo.save(order);
+    }
+
     private BigDecimal getDiscount(BigDecimal amount){
         BigDecimal percent = new BigDecimal("0.03");
         BigDecimal discount = amount.multiply(percent);
