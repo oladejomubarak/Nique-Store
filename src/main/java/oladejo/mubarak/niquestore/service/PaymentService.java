@@ -48,6 +48,10 @@ public class PaymentService {
                 paymentDetails,
                 foundUser.getCart().getDeliveryDate()));
         foundUser.getCart().setPaymentStatus(PaymentStatus.SUCCESS);
+        for (Order order:foundUser.getCart().getOrderList()){
+            order.setPaymentStatus(PaymentStatus.SUCCESS);
+            orderService.saveOrder(order);
+        }
         foundUser.getCart().getOrderList().clear();
         userService.saveUser(foundUser);
 
@@ -77,6 +81,7 @@ public class PaymentService {
                 paymentDetails,
                 foundOrder.getDeliveryDate()));
         foundOrder.setPaymentStatus(PaymentStatus.SUCCESS);
+        orderService.saveOrder(foundOrder);
         return "Payment Successful";
     }
 

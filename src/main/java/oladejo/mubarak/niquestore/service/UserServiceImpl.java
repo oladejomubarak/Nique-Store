@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 @Service
@@ -217,6 +218,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public void saveUser(AppUser appUser) {
         userRepo.save(appUser);
+    }
+
+    @Override
+    public List<AppUser> findAllUsers() {
+        return userRepo.findAll();
     }
 
     private String generateToken(){

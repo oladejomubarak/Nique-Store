@@ -76,6 +76,7 @@ public class OrderServiceImpl implements OrderService{
         order.setUser(foundUser);
         order.setProduct(foundProduct);
         order.setQuantity(orderProductRequest.getQuantity());
+        order.setPaymentStatus(PaymentStatus.PENDING);
         order.setTotalPrice(foundProduct.getPrice().multiply(BigDecimal.valueOf(orderProductRequest.getQuantity())));
         orderRepo.save(order);
         order.setUser(null);

@@ -4,6 +4,8 @@ import jakarta.mail.MessagingException;
 import oladejo.mubarak.niquestore.data.dto.request.*;
 import oladejo.mubarak.niquestore.data.model.AppUser;
 
+import java.util.List;
+
 public interface UserService {
     AppUser findByEmail(String email);
     AppUser findByPhoneNumber(String phone_number);
@@ -18,5 +20,6 @@ public interface UserService {
     String deleteUserByEmail(String email);
     String deleteAllTokens();
     void saveUser(AppUser appUser);
+    List<AppUser>findAllUsers();
 
 }
