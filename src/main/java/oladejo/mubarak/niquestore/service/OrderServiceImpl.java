@@ -3,10 +3,7 @@ package oladejo.mubarak.niquestore.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import oladejo.mubarak.niquestore.data.dto.request.OrderProductRequest;
-import oladejo.mubarak.niquestore.data.model.AppUser;
-import oladejo.mubarak.niquestore.data.model.Order;
-import oladejo.mubarak.niquestore.data.model.PaymentStatus;
-import oladejo.mubarak.niquestore.data.model.Product;
+import oladejo.mubarak.niquestore.data.model.*;
 import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.repository.OrderRepo;
 import org.springframework.stereotype.Service;
@@ -21,13 +18,14 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService{
     private final UserServiceImpl userService;
     private final ProductServiceImpl productService;
+    private final CartService cartService;
     private final OrderRepo orderRepo;
     @Override
     public Order orderProduct(OrderProductRequest orderProductRequest) {
         AppUser foundUser = userService.findByEmail(orderProductRequest.getCustomerEmail());
         Product foundProduct = productService.findProduct(orderProductRequest.getProductId());
         if(orderProductRequest.getQuantity() > foundProduct.getQuantity()) {throw new NiqueStoreException("" +
-                "You ordered "+orderProductRequest.getQuantity()+", but only "+foundProduct.getQuantity()+" are left");
+                "You ordered "+orderProductRequest.getQuantity()+" quantities, but only "+foundProduct.getQuantity()+" are left");
         }
         BigDecimal totalPrice = foundProduct.getPrice().multiply(BigDecimal.valueOf(orderProductRequest.getQuantity()));
 
@@ -56,6 +54,12 @@ public class OrderServiceImpl implements OrderService{
         Order foundOrder = findOrder(orderId);
         if(foundOrder.getDeliveryDate().equals(LocalDate.now())) {throw new NiqueStoreException("" +
                 "You can't cancel order on the delivery date");}
+        for(Product product: productService.findAllProducts()){
+            if(product.equals(foundOrder.getProduct())){
+                product.setQuantity(product.getQuantity() + foundOrder.getQuantity());
+                productService.saveProduct(product);
+            }
+        }
         orderRepo.delete(foundOrder);
     }
 
@@ -69,7 +73,7 @@ public class OrderServiceImpl implements OrderService{
         AppUser foundUser = userService.findByEmail(orderProductRequest.getCustomerEmail());
         Product foundProduct = productService.findProduct(orderProductRequest.getProductId());
         if(orderProductRequest.getQuantity() > foundProduct.getQuantity()) {throw new NiqueStoreException("" +
-                "You ordered "+orderProductRequest.getQuantity()+", but only "+foundProduct.getQuantity()+" are left");
+                "You ordered "+orderProductRequest.getQuantity()+" quantities, but only "+foundProduct.getQuantity()+" are left");
         }
         foundProduct.setVendor(null);
         Order order = new Order();
@@ -80,6 +84,12 @@ public class OrderServiceImpl implements OrderService{
         order.setTotalPrice(foundProduct.getPrice().multiply(BigDecimal.valueOf(orderProductRequest.getQuantity())));
         orderRepo.save(order);
         order.setUser(null);
+        if(foundUser.getCart() == null){
+            Cart cart = new Cart();
+            cartService.saveCart(cart);
+            foundUser.setCart(cart);
+            userService.saveUser(foundUser);
+        }
         foundUser.getCart().getOrderList().add(order);
         //foundUser.getCart().setAmountToPay(order.getTotalPrice());
         userService.saveUser(foundUser);
@@ -89,6 +99,13 @@ public class OrderServiceImpl implements OrderService{
     public void removeOrderFromCart(String customerEmail, String orderId) {
         AppUser foundUser = userService.findByEmail(customerEmail);
         Order foundOder = findOrder(orderId);
+        for(Product product: productService.findAllProducts()){
+            if(product.equals(foundOder.getProduct())){
+                product.setQuantity(product.getQuantity() + foundOder.getQuantity());
+                productService.saveProduct(product);
+            }
+        }
+
         foundUser.
                 getCart()
                 .getOrderList()

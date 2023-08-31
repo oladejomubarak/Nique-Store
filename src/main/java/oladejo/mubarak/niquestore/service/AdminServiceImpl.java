@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import oladejo.mubarak.niquestore.data.dto.request.CreateVendorRequest;
 import oladejo.mubarak.niquestore.data.model.AppUser;
+import oladejo.mubarak.niquestore.data.model.Cart;
 import oladejo.mubarak.niquestore.data.model.Role;
 import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.repository.UserRepo;
@@ -22,6 +23,8 @@ public class AdminServiceImpl implements AdminService{
 
     private final PasswordEncoder passwordEncoder;
     private final UserServiceImpl userService;
+    private final CartService cartService;
+
 
     private final UserRepo userRepo;
     @PostConstruct
@@ -35,6 +38,9 @@ public class AdminServiceImpl implements AdminService{
             user.setEnabled(true);
             user.setRole(rolesSet);
             user.setPassword(passwordEncoder.encode("12345"));
+            Cart cart = new Cart();
+            cartService.saveCart(cart);
+            user.setCart(cart);
             userRepo.save(user);
         }
     }

@@ -18,7 +18,7 @@ import java.util.Set;
 public class AppUser {
     @Id
     private String id;
-    //@Email
+    @Email
     @NotBlank(message = "This field can't be empty")
     private String email;
     @NotBlank(message = "This field can't be empty")
@@ -33,4 +33,10 @@ public class AppUser {
     private Set<Role> role;
     @DBRef
     private Cart cart;
+    public Cart getCart() {
+        if (cart == null) {
+            cart = new Cart();
+        }
+        return cart;
+    }
 }

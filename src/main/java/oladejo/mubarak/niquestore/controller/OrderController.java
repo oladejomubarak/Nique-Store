@@ -51,7 +51,7 @@ public class OrderController {
     public ResponseEntity<?> addToCart(@RequestBody OrderProductRequest orderProductRequest){
         try{
             ApiResponse apiResponse = ApiResponse.builder()
-                    .message("You order has been placed successfully, pls proceed to payment")
+                    .message("Order has been added to cart")
                     .data(orderService.addOrderToCart(orderProductRequest))
                     .status(HttpStatus.OK.value())
                     .build();

@@ -81,8 +81,8 @@ public class UserServiceImpl implements UserService{
             if (!userDto.getPassword().equals(userDto.getConfirmPassword()))
                 throw new NiqueStoreException("passwords do not match");
             Cart cart = new Cart();
-            user.setCart(cart);
             cartService.saveCart(cart);
+            user.setCart(cart);
             userRepo.save(user);
 
             String token = generateToken();
