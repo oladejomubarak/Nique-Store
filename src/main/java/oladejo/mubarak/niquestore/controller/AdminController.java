@@ -3,8 +3,6 @@ import lombok.RequiredArgsConstructor;
 import oladejo.mubarak.niquestore.data.dto.request.CreateVendorRequest;
 import oladejo.mubarak.niquestore.exception.NiqueStoreException;
 import oladejo.mubarak.niquestore.service.AdminServiceImpl;
-import oladejo.mubarak.niquestore.service.CustomerServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

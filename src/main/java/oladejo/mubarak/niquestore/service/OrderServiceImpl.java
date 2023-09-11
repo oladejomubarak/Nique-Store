@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService{
     public void cancelOrder(String orderId) {
         Order foundOrder = findOrder(orderId);
         if(foundOrder.getDeliveryDate().equals(LocalDate.now())) {throw new NiqueStoreException("" +
-                "You can't cancel order on the delivery date");}
+                "You can't cancel order on the delivery day");}
         for(Product product: productService.findAllProducts()){
             if(product.equals(foundOrder.getProduct())){
                 product.setQuantity(product.getQuantity() + foundOrder.getQuantity());
