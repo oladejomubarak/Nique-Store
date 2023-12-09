@@ -102,10 +102,8 @@ public class OrderServiceImpl implements OrderService{
         for(Product product: productService.findAllProducts()){
             if(product.equals(foundOder.getProduct())){
                 product.setQuantity(product.getQuantity() + foundOder.getQuantity());
-                productService.saveProduct(product);
-            }
+                productService.saveProduct(product);}
         }
-
         foundUser.
                 getCart()
                 .getOrderList()
