@@ -1,6 +1,10 @@
 server:
   port: 8081
 spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://Nique:${MONGO_PASSWORD}@cluster0.ycq7571.mongodb.net/?retryWrites=true&w=majority
+      database: ${DB_NAME}
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
