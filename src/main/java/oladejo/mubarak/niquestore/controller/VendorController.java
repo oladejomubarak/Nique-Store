@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/vendor/")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class VendorController {
     private final ProductServiceImpl productService;
 
